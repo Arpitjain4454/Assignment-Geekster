@@ -1,0 +1,67 @@
+@Entity
+public class Restaurant {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String name;
+    private String address;
+    private String number;
+    private String speciality;
+    private Integer totalStaffs;
+    // Add additional variables if needed
+
+    // Getters and Setters
+}
+@RestController
+public class RestaurantController {
+    private final RestaurantRepository repository;
+
+    public RestaurantController(RestaurantRepository repository) {
+        this.repository = repository;
+    }
+
+    @PostMapping("/restaurants")
+    public Restaurant addRestaurant(@RequestBody Restaurant restaurant) {
+        return repository.save(restaurant);
+    }
+}
+@RestController
+public class RestaurantController {
+    private final RestaurantRepository repository;
+
+    public RestaurantController(RestaurantRepository repository) {
+        this.repository = repository;
+    }
+
+    @GetMapping("/restaurants/{name}")
+    public Optional<Restaurant> getRestaurantByName(@PathVariable String name) {
+        return repository.findByName(name);
+    }
+
+    @GetMapping("/restaurants")
+    public List<Restaurant> getAllRestaurants(@RequestParam(required = false) String name) {
+        if (name != null) {
+            return repository.findAllByName(name);
+        }
+        return repository.findAll();
+    }
+}
+@RestController
+public class RestaurantController {
+    private final RestaurantRepository repository;
+
+    public RestaurantController(RestaurantRepository repository) {
+        this.repository = repository;
+    }
+
+    @PutMapping("/restaurants/{id}")
+    public Restaurant updateRestaurant(@PathVariable Long id, @RequestBody Restaurant restaurant) {
+        restaurant.setId(id);
+        return repository.save(restaurant);
+    }
+
+    @DeleteMapping("/restaurants/{id}")
+    public void deleteRestaurant(@PathVariable Long id) {
+        repository.deleteById(id);
+    }
+}
